@@ -1,8 +1,13 @@
-** Two View Reconstruction ** 
+# Two View Reconstruction
 
-> Prerequisites:
->> this project uses opencv 3.4 and opencv_contib 3.4. Please make sure to have them installed in your local machine. You can follow the commands below, but make sure you make necessary changes:
-'''
+
+## Prerequisites:This is a mini project toconduct  two-view reconstruction
+ - The project has been tested on Ubuntu 20.04.
+
+## Prerequisites:
+ - This project relies on opencv 3.4 and opencv_contrib 3.4. Please make sure to have them installed on your machine. You can follow the commands below, but plaese make sure to modify the commands as needed:
+
+```
 git clone -b 3.4 https://github.com/opencv/opencv.git
 
 git clone -b 3.4 https://github.com/opencv/opencv_contrib.git
@@ -18,33 +23,29 @@ cd build
 
 cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local ..
 
-
 make -j$(nproc)
 
 sudo make install
 
 sudo ldconfig
 
-'''
+```
+## build:
 
-> This is a mini project toconduct  two-view reconstruction
-> The project has been tested in Ubuntu 20.04, and opencv 3.4
-
-> clone to the directory
-'''
+ - clone to the directory:
+```
 git clone https://github.com/meqdadhn/mini_project.git
-'''
+```
 
+ - build the executable (chmod command is only needed for the first time of running):
 
-> build the executable using following command:
+```
+chmod +x build.sh
+./build.sh
+```
 
-'''
-$ chmod +x build.sh
-$ ./build.sh
-'''
-
-> run the executable
-'''
+ - run the program (chmod command is only needed for the first time of running)
+```
 chmod +x run.sh
 ./run.sh
-'''
+```
