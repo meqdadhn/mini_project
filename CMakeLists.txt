@@ -1,9 +1,17 @@
 cmake_minimum_required(VERSION 3.12)
 project(TwoViewReconstruction)
 
-find_package(OpenCV REQUIRED)
-find_package(OpenCV REQUIRED COMPONENTS core highgui imgproc features2d xfeatures2d)
+# Set C++ standard
+set(CMAKE_CXX_STANDARD 14)
 
-add_executable(TwoViewReconstruction main.cpp)
+# Find OpenCV 3.4
+find_package(OpenCV 3.4 REQUIRED COMPONENTS core highgui imgproc features2d xfeatures2d)
 
+# Set include directories
+include_directories(include)
+
+# Add your source files
+add_executable(TwoViewReconstruction src/main.cpp src/TwoViewReconstruction.cpp)
+
+# Link against OpenCV 3.4
 target_link_libraries(TwoViewReconstruction ${OpenCV_LIBS})
