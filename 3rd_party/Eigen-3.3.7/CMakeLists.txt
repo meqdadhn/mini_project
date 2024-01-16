@@ -1,0 +1,2 @@
+project(Eigen-3.3.7)
+set(Eigen-3.3.7_INCLUDE_DIR ${PROJECT_SOURCE_DIR} CACHE INTERNAL "" FORCE)
