@@ -74,7 +74,7 @@ bool TwoViewReconstruction::ProcessImage(cv::Mat& img1, cv::Mat& img2) {
 
 
     cv::Mat fundamental_matrix = cv::findFundamentalMat(points1, points2, cv::FM_RANSAC, 3.0, 0.99, mask_);
-
+    cv::cv2eigen(fundamental_matrix, F21_);
     // Filter inliers and outliers
     std::vector<cv::DMatch> inliers, outliers;
     for (size_t i = 0; i < matches.size(); ++i) {
@@ -120,7 +120,7 @@ bool TwoViewReconstruction::ProcessImage(cv::Mat& img1, cv::Mat& img2) {
 }
 
 bool TwoViewReconstruction::Reconstruct(std::vector<cv::Point3f>& vP3D,  std::vector<bool>& vbTriangulated,
-                                        Eigen::Matrix3f R, Eigen::Vector3f t) {
+                                        Eigen::Matrix3f& R, Eigen::Vector3f& t) {
 
     // Compute Essential Matrix from Fundamental Matrix
     Eigen::Matrix3f E21 = K_.transpose() * F21_ * K_;
@@ -139,75 +139,52 @@ bool TwoViewReconstruction::Reconstruct(std::vector<cv::Point3f>& vP3D,  std::ve
     std::vector<bool> vbTriangulated1,vbTriangulated2,vbTriangulated3, vbTriangulated4;
     float parallax1,parallax2, parallax3, parallax4;
 
-    int nGood1 = CheckRT(R1, t1, vP3D1, 40.0, vbTriangulated1, parallax1);
-    int nGood2 = CheckRT(R2, t1, vP3D2, 40.0, vbTriangulated2, parallax2);
-    int nGood3 = CheckRT(R1, t2, vP3D3, 40.0, vbTriangulated3, parallax3);
-    int nGood4 = CheckRT(R2, t2, vP3D4, 40.0, vbTriangulated4, parallax4);
+    int nGood1 = CheckRT(R1, t1, vP3D1, 100.0, vbTriangulated1, parallax1);
+    int nGood2 = CheckRT(R2, t1, vP3D2, 100.0, vbTriangulated2, parallax2);
+    int nGood3 = CheckRT(R1, t2, vP3D3, 100.0, vbTriangulated3, parallax3);
+    int nGood4 = CheckRT(R2, t2, vP3D4, 100.0, vbTriangulated4, parallax4);
 
     int maxGood = std::max(nGood1,std::max(nGood2,std::max(nGood3,nGood4)));
 
-    int nMinGood = 20;
-
-    int nsimilar = 0;
-    if(nGood1>0.7*maxGood)
-        nsimilar++;
-    if(nGood2>0.7*maxGood)
-        nsimilar++;
-    if(nGood3>0.7*maxGood)
-        nsimilar++;
-    if(nGood4>0.7*maxGood)
-        nsimilar++;
-
-    // If there is not a clear winner or not enough triangulated points reject initialization
-    if(maxGood<nMinGood || nsimilar>1) {
+    // If there is not enough triangulated points reject initialization
+    if(maxGood<20) {
+        std::cerr << "Error: too few inliers to recover pose." << std::endl;
         return false;
     }
 
     // If best reconstruction has enough parallax initialize
     if(maxGood==nGood1)
     {
-        if(parallax1>1.0)
-        {
             vP3D = vP3D1;
             vbTriangulated = vbTriangulated1;
 
             R = R1.transpose();
             t = - R1.transpose() * t1;
             return true;
-        }
     }else if(maxGood==nGood2)
     {
-        if(parallax2>1.0)
-        {
             vP3D = vP3D2;
             vbTriangulated = vbTriangulated2;
 
             R = R2.transpose();
             t = -R2.transpose()* t1;
             return true;
-        }
     }else if(maxGood==nGood3)
     {
-        if(parallax3>1.0)
-        {
             vP3D = vP3D3;
             vbTriangulated = vbTriangulated3;
 
             R = R1.transpose();
             t = -R1.transpose() * t2;
             return true;
-        }
     }else if(maxGood==nGood4)
     {
-        if(parallax4>1.0)
-        {
             vP3D = vP3D4;
             vbTriangulated = vbTriangulated4;
 
             R = R2.transpose();
             t = -R2.transpose() * t2;
             return true;
-        }
     }
 
     return false;

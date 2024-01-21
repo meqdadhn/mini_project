@@ -7,9 +7,17 @@
 //
 /*///////////////////////////////////////////////////////////////////////////////////////
 
-#include <opencv2/opencv.hpp>
-#include <opencv2/xfeatures2d.hpp>
+
+#ifndef __TWOVIEW_RECONSTRUCT__
+#define __TWOVIEW_RECONSTRUCT__
+
+#include <Eigen/Core>
 #include <Eigen/Dense>
+
+#include <opencv2/opencv.hpp>
+#include <opencv2/core/eigen.hpp>
+#include <opencv2/xfeatures2d.hpp>
+
 #include <fstream>
 
 class TwoViewReconstruction {
@@ -31,9 +39,7 @@ public:
 
     // reconstruct two views
     bool Reconstruct(std::vector<cv::Point3f>& vP3D,  std::vector<bool>& vbTriangulated,
-                    Eigen::Matrix3f R, Eigen::Vector3f t);
-
-
+                    Eigen::Matrix3f& R, Eigen::Vector3f& t);
 
 private:
 
@@ -57,3 +63,5 @@ private:
     Eigen::Matrix3f K_, F21_;
 
 };
+
+#endif
