@@ -72,8 +72,10 @@ int main() {
 
     // free memory
     delete stereo;
-
+    
+    std::cout << "=====================================" << std::endl;
     std::cout << "Please find the results under out/" << std::endl;
+    std::cout << "=====================================" << std::endl;
 
     return 0;
 }
