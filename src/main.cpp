@@ -22,6 +22,8 @@ int main() {
         return -1;
     } 
 
+    std::cout << "images Loaded Successfully" << std::endl;
+
     // calibration matrix 
     float fx = 618.358;
     float fy = 618.592;
@@ -42,6 +44,7 @@ int main() {
     Eigen::Vector3f t;
 
     if (status) {
+        std::cout << "image processing successed" << std::endl;
         stereo->Reconstruct(vP3D, vbTriangulated, R, t);
     }
 
