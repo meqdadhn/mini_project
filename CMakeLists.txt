@@ -5,7 +5,7 @@ project(TwoViewReconstruction)
 set(CMAKE_CXX_STANDARD 14)
 
 # Find OpenCV 3.4
-find_package(OpenCV 3.4 REQUIRED COMPONENTS core highgui imgproc features2d xfeatures2d)
+find_package(OpenCV 4.2.0 REQUIRED COMPONENTS core highgui imgproc features2d xfeatures2d)
 
 # Include Eigen from the 3rdparty directory
 include_directories(3rd_party/Eigen-3.3.7)
